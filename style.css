@@ -121,6 +121,10 @@ body{
     animation: shake 250ms ease-in-out;
 }
 
+.flip{
+    background-color: red;
+}
+
 @keyframes shake {
     10%{
         transform: translateX(-5%);
