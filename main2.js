@@ -13,8 +13,8 @@ const dictionary = ["cigar","rebut","sissy","humph","awake","blush","focal","eva
 "whilk","whims","whins","whios","whips","whipt","whirr","whirs","whish","whiss","whist","whits","whity","whizz","whomp","whoof","whoot","whops","whorl","whort","whoso","whows","whump","whups","whyda","wicca","wicks","wicky","widdy","wides","wiels","wifed","wifes","wifey","wifie","wifty","wigan","wigga","wiggy","wikis","wilco","wilds","wiled","wiles","wilga","wilis","wilja","wills","wilts","wimps","winds","wined","wines","winey","winge","wings","wingy","winks","winna","winns","winos","winze","wiped","wiper","wipes","wired","wirer","wires","wirra","wised","wises","wisha","wisht","wisps","wists","witan","wited","wites","withe","withs","withy","wived","wiver","wives","wizen","wizes","woads","woald","wocks","wodge","woful","wojus","woker","wokka","wolds","wolfs","wolly","wolve","wombs","womby","womyn","wonga","wongi","wonks","wonky","wonts","woods","wooed","woofs","woofy","woold","wools","woons","woops","woopy","woose","woosh","wootz","words","works","worms","wormy","worts","wowed","wowee","woxen","wrang","wraps","wrapt","wrast","wrate","wrawl","wrens","wrick","wried","wrier","wries","writs","wroke","wroot","wroth","wryer","wuddy","wudus","wulls","wurst","wuses","wushu","wussy","wuxia","wyled","wyles","wynds","wynns","wyted","wytes","xebec","xenia","xenic","xenon","xeric","xerox","xerus","xoana","xrays","xylan","xylem","xylic","xylol","xylyl","xysti","xysts","yaars","yabas","yabba","yabby","yacca","yacka","yacks","yaffs","yager","yages","yagis","yahoo","yaird","yakka","yakow","yales","yamen","yampy","yamun","yangs","yanks","yapok","yapon","yapps","yappy","yarak","yarco","yards","yarer","yarfa","yarks","yarns","yarrs","yarta","yarto","yates","yauds","yauld","yaups","yawed","yawey","yawls","yawns","yawny","yawps","ybore","yclad","ycled","ycond","ydrad","ydred","yeads","yeahs","yealm","yeans","yeard","years","yecch","yechs","yechy","yedes","yeeds","yeesh","yeggs","yelks","yells","yelms","yelps","yelts","yenta","yente","yerba","yerds","yerks","yeses","yesks","yests","yesty","yetis","yetts","yeuks","yeuky","yeven","yeves","yewen","yexed","yexes","yfere","yiked","yikes","yills","yince","yipes","yippy","yirds","yirks","yirrs","yirth","yites","yitie","ylems","ylike","ylkes","ymolt","ympes","yobbo","yobby","yocks","yodel","yodhs","yodle","yogas","yogee","yoghs","yogic","yogin","yogis","yoick","yojan","yoked","yokel","yoker","yokes","yokul","yolks","yolky","yomim","yomps","yonic","yonis","yonks","yoofs","yoops","yores","yorks","yorps","youks","yourn","yours","yourt","youse","yowed","yowes","yowie","yowls","yowza","yrapt","yrent","yrivd","yrneh","ysame","ytost","yuans","yucas","yucca","yucch","yucko","yucks","yucky","yufts","yugas","yuked","yukes","yukky","yukos","yulan","yules","yummo","yummy","yumps","yupon","yuppy","yurta","yurts","yuzus","zabra","zacks","zaida","zaidy","zaire","zakat","zaman","zambo","zamia","zanja","zante","zanza","zanze","zappy","zarfs","zaris","zatis","zaxes","zayin","zazen","zeals","zebec","zebub","zebus","zedas","zeins","zendo","zerda","zerks","zeros","zests","zetas","zexes","zezes","zhomo","zibet","ziffs","zigan","zilas","zilch","zilla","zills","zimbi","zimbs","zinco","zincs","zincy","zineb","zines","zings","zingy","zinke","zinky","zippo","zippy","ziram","zitis","zizel","zizit","zlote","zloty","zoaea","zobos","zobus","zocco","zoeae","zoeal","zoeas","zoism","zoist","zombi","zonae","zonda","zoned","zoner","zones","zonks","zooea","zooey","zooid","zooks","zooms","zoons","zooty","zoppa","zoppo","zoril","zoris","zorro","zouks","zowee","zowie","zulus","zupan","zupas","zuppa","zurfs","zuzim","zygal","zygon","zymes","zymic"]
 
 const wordLenght = 5
-let keyboard = document.querySelector("keyboard")
-let keys = document.querySelectorAll("[data-key]")
+const keyboard = document.querySelector("[data-keyboard]")
+const keys = document.querySelectorAll("[data-key]")
 const alertContainer = document.querySelector("[data-alert-container]")
 let guessGrid = document.querySelector("[data-guess-grid]")
 const targetWord = targetWords[Math.floor(Math.random() * targetWords.length)]
@@ -22,7 +22,6 @@ const targetWord = targetWords[Math.floor(Math.random() * targetWords.length)]
 startInteraction()
 
 console.log(targetWord)
-console.log(dictionary.includes("point"))
 
 function startInteraction() {
     document.addEventListener('click', handleMouseClick)
@@ -130,31 +129,65 @@ function submitGuess (){
     stopInteraction()
     console.log(activeKeys.length)
     activeTiles.forEach((...params) => flipTile(...params, guess))
-    activeKeys.forEach(key => {
-        console.log(key)
-    })
+    getActiveKeys()
 }
 
-function evaluateGuess(){
-
+const activeKeys = new Array()
+function getActiveKeys(){
+    const activeLetters = getActiveTiles()
+    activeLetters.forEach(letter =>{
+        keys.forEach((keyed) => {
+            if (letter.innerHTML.toUpperCase() === keyed.innerHTML){
+                activeKeys.push(keyed)
+            }
+            else{
+                return
+            }
+        });
+    })
+    return(activeKeys)
 }
 
 function flipTile(tile, index, array, guess) {
     const letter = tile.dataset.letter.toUpperCase()
-    console.log(letter)
-    let key = document.querySelector('active')
+    console.log(activeKeys)
+    
     setTimeout(() => {
         tile.classList.add("flip")
     }, (index * 500/2))
+
+    tile.addEventListener("transitionend", () => {
+        tile.classList.remove("flip")
+        console.log(targetWord[index])
+        console.log(letter)
+        if(targetWord[index] === letter.toLowerCase()){
+            tile.dataset.state = "correct"
+            activeKeys[index].classList.add('correct') 
+        }
+        else if(targetWord.includes(letter.toLowerCase())){
+            tile.dataset.state = "wrong-location"
+        }
+        else {
+            tile.dataset.state = "wrong"
+        }
+        
+       
+
+        if(index === array.length - 1){
+            tile.addEventListener("transitionend", () => {
+                startInteraction()
+                checkWinLose(guess, array)
+            }, {once: true})
+            
+
+        }
+    }, {once: true})
 }
 
 function getActiveTiles(){
     return guessGrid.querySelectorAll('[data-state="active"]')
 }
 
-function getActiveKeys(){
-    return document.querySelectorAll('active')
-}
 
 function showAlert(message, duration = 1000){
     const alert = document.createElement("div")
@@ -166,7 +199,7 @@ function showAlert(message, duration = 1000){
     setTimeout(() => {
         alert.classList.add("hide")
         alert
-        .addEventListener("transitioned", () => {
+        .addEventListener("transitionend", () => {
             alert.remove()
         })
     }, duration)
@@ -180,5 +213,34 @@ function shakeTiles(tiles) {
             tile.classList.remove("shake")
         }, {once: true}
         )
+    })
+}
+
+function checkWinLose(guess, tiles) {
+    if(guess === targetWord){
+        showAlert("You Win", 5000)
+        danceTiles(tiles)
+        stopInteraction()
+        return
+    }
+
+    const remainingTiles = guessGrid.querySelectorAll(":not([data-letter]")
+    if(remainingTiles.length === 0){
+        showAlert(targetWord.toUpperCase(), null)
+        stopInteraction()
+    }
+}
+
+function danceTiles(tiles) {
+    tiles.forEach((tile, index) => {
+        setTimeout(() => {
+            tile.classList.add("dance")
+            tile.addEventListener("animationed",
+            () =>{
+                tile.classList.remove("dance")
+            }, {once: true}
+            )
+        }, (index * 500)/5)
+        
     })
 }

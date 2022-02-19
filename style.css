@@ -96,6 +96,7 @@ body{
     justify-content: center;
     align-items: center;
     user-select: none;
+    transition: transform 250ms linear;
 }
 
 .tile[data-state="active"]{
@@ -122,7 +123,7 @@ body{
 }
 
 .flip{
-    background-color: red;
+    transform: rotateX(90deg);
 }
 
 @keyframes shake {
@@ -146,6 +147,36 @@ body{
 
     100%{
         transform: translateX(0%);
+    }
+}
+
+.tile.dance{
+    animation: dance 250ms ease-in-out;
+}
+
+
+@keyframes dance {
+    20%{
+        transform: translateY(-50%);
+    }
+
+    40%{
+        transform: translateY(5%);
+    }
+    60%{
+        transform: translateY(-25%);
+    }
+
+    80%{
+        transform: translateY(2.5%);
+    }
+    90%{
+        transform: translateY(-5%);
+    }
+
+
+    100%{
+        transform: translateY(0%);
     }
 }
 
@@ -176,4 +207,75 @@ body{
 
 .alert.hide{
     opacity: 0;
+}
+
+
+header{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0rem 0.2rem 0.5rem black;
+    z-index: 10;
+    margin-top: 10px;
+}
+
+.header--scroll{
+    background-color: grey;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.header{
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 96vw;
+    padding: 0.3rem 1rem;
+}
+
+.logo{
+    width: 40px;
+    border-radius: 50%;
+}
+
+.title{
+    font-size: 1rem;
+    color: rgb(42, 69, 148);
+    
+    padding: 0 5px;
+}
+
+.title-link{
+    display: flex;
+    align-items: center;
+}
+
+.title-name{
+    font-family: monospace;
+    color:black;
+    font-weight: 100;
+}
+
+.nav-toggle{
+    font-size: 1.5rem;
+    color: rgb(17, 42, 119);
+}
+
+
+
+
+@media screen and (max-width: 500px) {
+
+    .guess-grid{
+        grid-template-columns: repeat(5, 5.5em);
+        grid-template-rows: repeat(6, 5.5em);
+        margin-top: 2.5rem;
+    }
+    .keyboard{
+        grid-auto-rows: 4.5em;
+        grid-template-columns: repeat(20, 1fr);
+    }
 }
