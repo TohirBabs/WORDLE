@@ -263,7 +263,9 @@ header{
     font-size: 1.5rem;
     color: rgb(17, 42, 119);
 }
-
+a{
+    text-decoration: none;
+}
 
 
 
